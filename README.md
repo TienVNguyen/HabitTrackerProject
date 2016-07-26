@@ -1,9 +1,11 @@
 # HabitTrackerProject
 An small demo app to complete the project 8. See the Tutorial on our cliffnotes for a step-by-step tutorial.
 
-Time spent: 8 hours implementation (included searching) in total
+Time spent: 16 hours implementation (included searching) in total
  - 07/24: 8 hours
-
+ - 07/25: 4 hours
+ - 07/26: 4 hours
+ 
 Implement link: https://github.com/TienVNguyen/HabitTrackerProject
 
  - Layout:
