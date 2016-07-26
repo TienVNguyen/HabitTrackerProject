@@ -16,6 +16,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import com.training.tiennguyen.habittrackerproject.constants.DatabaseConstant;
 import com.training.tiennguyen.habittrackerproject.models.HabitModel;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -29,26 +30,26 @@ public class HabitDbHelper extends SQLiteOpenHelper {
     /**
      * CREATE TABLE HABITS ( ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL ,TITLE KEY NOT NULL ,DATE KEY NOT NULL ,DETAILS KEY ,COMPLETED BOOLEAN KEY NOT NULL ) ;
      */
-    private static final String SQL_CREATE_ENTRIES = DatabaseConstant.CREATE_TABLE + HabitDatabase.HabitContain.TABLE_NAME
+    private static final String SQL_CREATE_ENTRIES = DatabaseConstant.CREATE_TABLE + HabitDBContract.HabitContain.TABLE_NAME
             + DatabaseConstant.OPEN_BRACKETS
-            + HabitDatabase.HabitContain.COLUMN_NAME_ID + DatabaseConstant.INTEGER_PRIMARY_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
-            + HabitDatabase.HabitContain.COLUMN_NAME_TITLE + DatabaseConstant.STRING_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
-            + HabitDatabase.HabitContain.COLUMN_NAME_DATE + DatabaseConstant.STRING_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
-            + HabitDatabase.HabitContain.COLUMN_NAME_DETAILS + DatabaseConstant.STRING_KEY + DatabaseConstant.COMMA_SEP
-            + HabitDatabase.HabitContain.COLUMN_NAME_COMPLETED + DatabaseConstant.BOOLEAN_KEY + DatabaseConstant.NOT_NULL
+            + HabitDBContract.HabitContain.COLUMN_NAME_ID + DatabaseConstant.INTEGER_PRIMARY_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
+            + HabitDBContract.HabitContain.COLUMN_NAME_TITLE + DatabaseConstant.STRING_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
+            + HabitDBContract.HabitContain.COLUMN_NAME_DATE + DatabaseConstant.STRING_KEY + DatabaseConstant.NOT_NULL + DatabaseConstant.COMMA_SEP
+            + HabitDBContract.HabitContain.COLUMN_NAME_DETAILS + DatabaseConstant.STRING_KEY + DatabaseConstant.COMMA_SEP
+            + HabitDBContract.HabitContain.COLUMN_NAME_COMPLETED + DatabaseConstant.BOOLEAN_KEY + DatabaseConstant.NOT_NULL
             + DatabaseConstant.CLOSE_BRACKETS + DatabaseConstant.SEMICOLON;
 
     /**
      * DROP TABLE HABITS IF EXISTS;
      */
-    private static final String SQL_DELETE_ENTRIES =
-            DatabaseConstant.DROP_TABLE_EXISTED + HabitDatabase.HabitContain.TABLE_NAME + DatabaseConstant.SEMICOLON;
+    /*private static final String SQL_DELETE_ENTRIES =
+            DatabaseConstant.DROP_TABLE_EXISTED + HabitDBContract.HabitContain.TABLE_NAME + DatabaseConstant.SEMICOLON;*/
 
     /**
      * DELETE FROM HABITS;
      */
     private static final String SQL_DELETE_ALL_ENTRIES =
-            DatabaseConstant.DROP_DELETE_FROM + HabitDatabase.HabitContain.TABLE_NAME + DatabaseConstant.SEMICOLON;
+            DatabaseConstant.DROP_DELETE_FROM + HabitDBContract.HabitContain.TABLE_NAME + DatabaseConstant.SEMICOLON;
 
     /**
      * Constructor
@@ -56,7 +57,7 @@ public class HabitDbHelper extends SQLiteOpenHelper {
      * @param context Context
      */
     public HabitDbHelper(Context context) {
-        super(context, HabitDatabase.DATABASE_NAME, null, HabitDatabase.DATABASE_VERSION);
+        super(context, HabitDBContract.DATABASE_NAME, null, HabitDBContract.DATABASE_VERSION);
     }
 
     @Override
@@ -68,17 +69,17 @@ public class HabitDbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
         // This database is only a cache for online data, so its upgrade policy is
         // to simply to discard the data and start over
-        deleteDatabase(sqLiteDatabase);
+        deleteDatabase();
         onCreate(sqLiteDatabase);
     }
 
     /**
      * Delete Database
-     *
-     * @param sqLiteDatabase SQLiteDatabase
      */
-    private void deleteDatabase(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+    private void deleteDatabase() {
+        //sqLiteDatabase.execSQL(SQL_DELETE_ENTRIES);
+        File file = new File(HabitDBContract.DATABASE_NAME);
+        SQLiteDatabase.deleteDatabase(file);
     }
 
     @Override
@@ -97,13 +98,13 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
         // Select table columns
         String[] columns = new String[]{
-                HabitDatabase.HabitContain.COLUMN_NAME_ID, HabitDatabase.HabitContain.COLUMN_NAME_TITLE,
-                HabitDatabase.HabitContain.COLUMN_NAME_DATE, HabitDatabase.HabitContain.COLUMN_NAME_DETAILS,
-                HabitDatabase.HabitContain.COLUMN_NAME_COMPLETED
+                HabitDBContract.HabitContain.COLUMN_NAME_ID, HabitDBContract.HabitContain.COLUMN_NAME_TITLE,
+                HabitDBContract.HabitContain.COLUMN_NAME_DATE, HabitDBContract.HabitContain.COLUMN_NAME_DETAILS,
+                HabitDBContract.HabitContain.COLUMN_NAME_COMPLETED
         };
 
         // Get the result
-        Cursor cursor = sqLiteDatabase.query(HabitDatabase.HabitContain.TABLE_NAME, columns, null, null, null, null, null);
+        Cursor cursor = sqLiteDatabase.query(HabitDBContract.HabitContain.TABLE_NAME, columns, null, null, null, null, null);
         List<HabitModel> resultSelect = new ArrayList<>();
         if (cursor != null && cursor.moveToFirst()) {
             do {
@@ -136,17 +137,17 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
         // Create a new map of values, where column names are the keys
         ContentValues values = new ContentValues();
-        values.put(HabitDatabase.HabitContain.COLUMN_NAME_TITLE, habitModel.getmTitle());
-        values.put(HabitDatabase.HabitContain.COLUMN_NAME_DATE, new Date().toString());
+        values.put(HabitDBContract.HabitContain.COLUMN_NAME_TITLE, habitModel.getmTitle());
+        values.put(HabitDBContract.HabitContain.COLUMN_NAME_DATE, new Date().toString());
         if (habitModel.getmDetails() != null) {
-            values.put(HabitDatabase.HabitContain.COLUMN_NAME_DETAILS, habitModel.getmDetails());
+            values.put(HabitDBContract.HabitContain.COLUMN_NAME_DETAILS, habitModel.getmDetails());
         }
-        values.put(HabitDatabase.HabitContain.COLUMN_NAME_COMPLETED, 0);
+        values.put(HabitDBContract.HabitContain.COLUMN_NAME_COMPLETED, 0);
 
         // Insert
         long newRowId = db.insert(
-                HabitDatabase.HabitContain.TABLE_NAME,
-                HabitDatabase.HabitContain.COLUMN_NAME_NULLABLE,
+                HabitDBContract.HabitContain.TABLE_NAME,
+                HabitDBContract.HabitContain.COLUMN_NAME_NULLABLE,
                 values);
 
         // Close connection
@@ -167,21 +168,21 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
         // New value for one column
         ContentValues values = new ContentValues();
-        values.put(HabitDatabase.HabitContain.COLUMN_NAME_DATE, new Date().toString());
+        values.put(HabitDBContract.HabitContain.COLUMN_NAME_DATE, new Date().toString());
         if (habitModel.getmDetails() != null) {
-            values.put(HabitDatabase.HabitContain.COLUMN_NAME_DETAILS, habitModel.getmDetails());
+            values.put(HabitDBContract.HabitContain.COLUMN_NAME_DETAILS, habitModel.getmDetails());
         }
-        values.put(HabitDatabase.HabitContain.COLUMN_NAME_COMPLETED, habitModel.getmCompleted());
+        values.put(HabitDBContract.HabitContain.COLUMN_NAME_COMPLETED, habitModel.getmCompleted());
 
         // Which row to update, based on the ID
-        String selection = HabitDatabase.HabitContain.COLUMN_NAME_ID + DatabaseConstant.SELECTION_IS;
+        String selection = HabitDBContract.HabitContain.COLUMN_NAME_ID + DatabaseConstant.SELECTION_IS;
 
         // Specify arguments in placeholder order
         String[] selectionArgs = {String.valueOf(habitModel.getmId())};
 
         // Update
         int count = sqLiteDatabase.update(
-                HabitDatabase.HabitContain.TABLE_NAME,
+                HabitDBContract.HabitContain.TABLE_NAME,
                 values,
                 selection,
                 selectionArgs);
@@ -203,14 +204,14 @@ public class HabitDbHelper extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = this.getReadableDatabase();
 
         // Which row to update, based on the ID
-        String selection = HabitDatabase.HabitContain.COLUMN_NAME_ID + DatabaseConstant.SELECTION_IS;
+        String selection = HabitDBContract.HabitContain.COLUMN_NAME_ID + DatabaseConstant.SELECTION_IS;
 
         // Specify arguments in placeholder order
         String[] selectionArgs = {String.valueOf(habitModel.getmId())};
 
         // Delete
         int count = sqLiteDatabase.delete(
-                HabitDatabase.HabitContain.TABLE_NAME,
+                HabitDBContract.HabitContain.TABLE_NAME,
                 selection,
                 selectionArgs);
 
@@ -229,7 +230,7 @@ public class HabitDbHelper extends SQLiteOpenHelper {
 
         // Remove all
         sqLiteDatabase.execSQL(SQL_DELETE_ALL_ENTRIES);
-        // sqLiteDatabase.delete(HabitDatabase.HabitContain.TABLE_NAME, null, null);
+        // sqLiteDatabase.delete(HabitDBContract.HabitContain.TABLE_NAME, null, null);
 
         // Close connection
         sqLiteDatabase.close();

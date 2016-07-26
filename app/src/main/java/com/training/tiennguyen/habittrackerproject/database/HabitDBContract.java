@@ -10,11 +10,11 @@ package com.training.tiennguyen.habittrackerproject.database;
 import android.provider.BaseColumns;
 
 /**
- * HabitDatabase
+ * HabitDBContract
  *
  * @author TienNguyen
  */
-public final class HabitDatabase {
+public final class HabitDBContract {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "HABITS.db";
     private static final String TABLE_HABITS = "HABITS";
@@ -28,7 +28,7 @@ public final class HabitDatabase {
     /**
      * To prevent someone from accidentally instantiating the contract class, give it an empty constructor.
      */
-    public HabitDatabase() {
+    public HabitDBContract() {
     }
 
     /**

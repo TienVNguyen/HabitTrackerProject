@@ -1,5 +1,5 @@
 # HabitTrackerProject
-An small demo app to complete the project 8. See the Tutorial on our cliffnotes for a step-by-step tutorial.
+An small demo app to complete the project 9. See the Tutorial on our cliffnotes for a step-by-step tutorial.
 
 Time spent: 16 hours implementation (included searching) in total
  - 07/24: 8 hours
